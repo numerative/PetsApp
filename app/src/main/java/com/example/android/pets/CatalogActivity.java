@@ -6,12 +6,10 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +30,7 @@ public class CatalogActivity extends AppCompatActivity implements
             PetEntry.COLUMN_PET_BREED
     };
     // Find ListView to populate
-    ListView PetListView;
+    ListView petListView;
     // Setup cursor adapter using cursor from last step
     PetCursorAdapter petCursorAdapter;
 
@@ -52,10 +50,10 @@ public class CatalogActivity extends AppCompatActivity implements
         });
 
         //Attaching empty adapter
-        PetListView = (ListView) findViewById(R.id.list_view_pet);
+        petListView = (ListView) findViewById(R.id.list_view_pet);
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
-        PetListView.setEmptyView(emptyView);
+        petListView.setEmptyView(emptyView);
 
 
         //Initializing the Cursor
@@ -63,7 +61,7 @@ public class CatalogActivity extends AppCompatActivity implements
                 projection, null, null, null);
         petCursorAdapter = new PetCursorAdapter(this, cursor);
         //Setting the empty adapter
-        PetListView.setAdapter(petCursorAdapter);
+        petListView.setAdapter(petCursorAdapter);
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
         getLoaderManager().initLoader(0, null, this);

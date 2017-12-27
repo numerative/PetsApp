@@ -51,14 +51,13 @@ public class CatalogActivity extends AppCompatActivity implements
             }
         });
 
-        
-
+        //Attaching empty adapter
+        PetListView = (ListView) findViewById(R.id.list_view_pet);
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
         PetListView.setEmptyView(emptyView);
 
-        //Attaching empty adapter
-        PetListView = (ListView) findViewById(R.id.list_view_pet);
+
         //Initializing the Cursor
         Cursor cursor = getContentResolver().query(PetEntry.CONTENT_URI,
                 projection, null, null, null);
@@ -137,7 +136,6 @@ public class CatalogActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
-            Log.v("Cursor Value", DatabaseUtils.dumpCursorToString(cursor));
             //Updating the cursor
             petCursorAdapter.swapCursor(cursor);
         }

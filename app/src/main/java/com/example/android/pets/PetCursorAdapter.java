@@ -54,7 +54,6 @@ public class PetCursorAdapter extends CursorAdapter {
      */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        // TODO: Fill out this method
         //Find fields to populate
         TextView nameView = (TextView) view.findViewById(R.id.name);
         TextView summaryView = (TextView) view.findViewById(R.id.summary);

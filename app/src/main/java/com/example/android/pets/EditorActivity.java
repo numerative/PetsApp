@@ -17,6 +17,8 @@ package com.example.android.pets;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -29,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.pets.data.PetContract.PetEntry;
@@ -36,28 +39,35 @@ import com.example.android.pets.data.PetContract.PetEntry;
 /**
  * Allows user to create a new pet or edit an existing one.
  */
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements
+        android.app.LoaderManager.LoaderCallbacks<Cursor> {
 
+    //Column to be fetched
+    String[] projection = {
+            PetEntry._ID,
+            PetEntry.COLUMN_PET_NAME,
+            PetEntry.COLUMN_PET_BREED,
+            PetEntry.COLUMN_PET_GENDER,
+            PetEntry.COLUMN_PET_WEIGHT
+    };
+    //Current Pet URI
+    Uri currentPetUri;
     /**
      * EditText field to enter the pet's name
      */
     private EditText mNameEditText;
-
     /**
      * EditText field to enter the pet's breed
      */
     private EditText mBreedEditText;
-
     /**
      * EditText field to enter the pet's weight
      */
     private EditText mWeightEditText;
-
     /**
      * EditText field to enter the pet's gender
      */
     private Spinner mGenderSpinner;
-
     /**
      * Gender of the pet. The possible values are:
      * 0 for unknown gender, 1 for male, 2 for female.
@@ -73,7 +83,7 @@ public class EditorActivity extends AppCompatActivity {
         //In order to figure out if we're creating a new pet orediting an existing one.
         Intent intent = getIntent();
         //Getting the Uri passed along as data
-        Uri currentPetUri = intent.getData();
+        currentPetUri = intent.getData();
         //Checking whether the currentPetUri is null
         if (currentPetUri != null) {
             setTitle(R.string.editor_activity_title_edit_pet);
@@ -86,8 +96,12 @@ public class EditorActivity extends AppCompatActivity {
         mBreedEditText = (EditText) findViewById(R.id.edit_pet_breed);
         mWeightEditText = (EditText) findViewById(R.id.edit_pet_weight);
         mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
-
         setupSpinner();
+
+        //Starting the Loader if currentPetUri is not null
+        if (currentPetUri != null) {
+            getLoaderManager().initLoader(0, null, this);
+        }
     }
 
     /**
@@ -182,5 +196,48 @@ public class EditorActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public android.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new android.content.CursorLoader(EditorActivity.this, currentPetUri, projection,
+                null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        cursor.moveToFirst();
+        //Setting Values from the cursor on to the Fields
+        mNameEditText.setText
+                (cursor.getString(cursor.getColumnIndexOrThrow(PetEntry.COLUMN_PET_NAME)));
+        mBreedEditText.setText
+                (cursor.getString(cursor.getColumnIndexOrThrow(PetEntry.COLUMN_PET_BREED)));
+        mWeightEditText.setText
+                (cursor.getString(cursor.getColumnIndexOrThrow(PetEntry.COLUMN_PET_WEIGHT)));
+
+        switch (cursor.getInt(cursor.getColumnIndexOrThrow(PetEntry.COLUMN_PET_GENDER))) {
+            case PetEntry.GENDER_FEMALE:
+                mGenderSpinner.setSelection(PetEntry.GENDER_FEMALE);
+                break;
+
+            case PetEntry.GENDER_MALE:
+                mGenderSpinner.setSelection(PetEntry.GENDER_MALE);
+                break;
+
+            case PetEntry.GENDER_UNKNOWN:
+                mGenderSpinner.setSelection(PetEntry.GENDER_UNKNOWN);
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(android.content.Loader<Cursor> loader) {
+        //Resetting the Textfields for other uses.
+        mNameEditText.setText(null);
+        mBreedEditText.setText(null);
+        mWeightEditText.setText(null);
+        mGenderSpinner.setSelection(PetEntry.GENDER_UNKNOWN);
+
     }
 }

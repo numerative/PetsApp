@@ -143,7 +143,7 @@ public class CatalogActivity extends AppCompatActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         // This is called when a new Loader needs to be created.
-        return new CursorLoader(getApplicationContext(), PetEntry.CONTENT_URI, projection,
+        return new CursorLoader(CatalogActivity.this, PetEntry.CONTENT_URI, projection,
                 null, null, null);
     }
 

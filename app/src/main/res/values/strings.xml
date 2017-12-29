@@ -53,6 +53,9 @@
     <string name="unit_pet_weight">kg</string>
 
     <!-- Label for dropdown menu option if the pet's gender is unknown [CHAR LIMIT=20] -->
+    <string name="breed_unknown">Unknown Breed</string>
+
+    <!-- Label for dropdown menu option if the pet's gender is unknown [CHAR LIMIT=20] -->
     <string name="gender_unknown">Unknown</string>
 
     <!-- Label for dropdown menu option if the pet is male [CHAR LIMIT=20] -->

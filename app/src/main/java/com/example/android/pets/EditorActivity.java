@@ -153,13 +153,25 @@ public class EditorActivity extends AppCompatActivity implements
 
     private void savePet() {
         Uri newUri;
+        //Check whether input fields are empty when save is clicked and finish activity if true
+        if (TextUtils.isEmpty(mNameEditText.getText().toString().trim()) &&
+                TextUtils.isEmpty(mBreedEditText.getText().toString().trim()) &&
+                TextUtils.isEmpty(mWeightEditText.getText().toString().trim()) &&
+                mGender == PetEntry.GENDER_UNKNOWN) {
+            return;
+        }
+        //If values are not null following code is executed
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(PetEntry.COLUMN_PET_NAME, mNameEditText.getText().toString().trim());
         values.put(PetEntry.COLUMN_PET_BREED, mBreedEditText.getText().toString().trim());
         values.put(PetEntry.COLUMN_PET_GENDER, mGender);
-        values.put(PetEntry.COLUMN_PET_WEIGHT, Integer.parseInt(mWeightEditText.getText().toString()));
-
+        if (!TextUtils.isEmpty(mWeightEditText.getText().toString())) {
+            values.put(PetEntry.COLUMN_PET_WEIGHT, Integer.parseInt(mWeightEditText.getText().toString()));
+        } else {
+            //if weight field is empty, input a 0
+            values.put(PetEntry.COLUMN_PET_WEIGHT, 0);
+        }
         //Check whether this is an Insert operation or Edit operation
         if (currentPetUri == null) {
             // Insert a new row for Toto into the provider using the ContentResolver.

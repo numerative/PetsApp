@@ -161,6 +161,5 @@ public class CatalogActivity extends AppCompatActivity implements
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
         petCursorAdapter.swapCursor(null);
-
     }
 }

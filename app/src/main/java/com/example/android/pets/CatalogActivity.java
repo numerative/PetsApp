@@ -95,7 +95,6 @@ public class CatalogActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        //displayDatabaseInfo();
     }
 
     @Override
@@ -186,6 +185,8 @@ public class CatalogActivity extends AppCompatActivity implements
         if (cursor != null && cursor.getCount() > 0) {
             //Updating the cursor
             petCursorAdapter.swapCursor(cursor);
+        } else {
+            petCursorAdapter.swapCursor(null);
         }
     }
 

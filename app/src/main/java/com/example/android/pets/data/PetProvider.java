@@ -255,12 +255,12 @@ public class PetProvider extends ContentProvider {
                 // Delete a single row given by the ID in the URI
                 selection = PetEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                //Notify all listeners that the data has changed for the pet content
                 rowsDeleted = database.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
+        //Notify all listeners that the data has changed for the pet content
         if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
